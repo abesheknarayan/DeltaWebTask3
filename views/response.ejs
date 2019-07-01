@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <link rel="stylesheet" href="/stylesheets/edit.css">
+<style>
+    img{
+        max-width: 300px;
+        max-height: 300px;
+        min-width: 200px;
+        min-height: 200px;
+    }
+  
+    </style>
+
+</head>
+<body>
+
+         <div id="header" >
+            <div class="homebtn">
+                <form action="/user" >
+                    <button>User Home Page</button>
+                </form> 
+                </div>
+         </div>
+    <div class="container">
+    <div class="qlist">
+    <h1>Form response page</h1>
+    <h2>Title:<%= form.title %></h2>
+    <h3>Description:<%= form.description %></h3>
+   <% form.file.forEach(function(file){ %>
+           <object data="<%= file.url %>" type="application/pdf" height="500" width="700"></object>
+  <%  }) %>
+  
+    <form action="/form/<%= form.id %>/submit/response" method="POST" enctype="multipart/form-data" >
+    <% form.questions.forEach(function(q){ %>
+        <p>Quesiton :<%= q.question %></p>
+        <% if(q.img.length>0){ %>
+            <% q.img.forEach(function(i,index){ %>
+               
+                <img src="<%= i.url %>" alt="img<%= index %>"><br>
+
+           <%  }) %>
+          <% } %>
+        <% if(q.type=="num"){ %>
+ <input type="number" name="a<%= q.pos %>">
+
+       <%  } %>
+      <% if(q.type=="text"){ %>
+            <textarea  id="" cols="30" rows="10" name="a<%= q.pos %>"></textarea>
+
+
+       <% } %>
+       <% if(q.type=="radio"){ %>
+        <% q.options.forEach(function(opt){ %>
+            
+            <input type="radio" name="a<%= q.pos %>" value="<%= opt %>"><%= opt %> <br>
+            
+       <%  }) %>
+       
+       <% } %>
+       <% if(q.type=="check"){ %>
+        <% q.options.forEach(function(opt){ %>
+            
+            <input type="checkbox" name="c<%= q.pos %>" value="<%= opt %>"><%= opt %> <br>
+            
+       <%  }) %>
+       
+       <% } %>
+        <% if(q.type =="image" ){ %>
+            <p>Images only!!</p>
+           <input type="file" name="myfile" accept="image/*" >
+           
+       <%  } %>
+       <% if(q.type == "file" ){ %>
+        <p>Files only!!</p>
+       <input type="file" name="myfile" accept="application/pdf" >
+       
+   <%  } %>
+       
+   
+    <% }) %>
+    <input type="submit" value="Submit response" >
+    </form>
+    </div>
+    </div>
+</body>
+</html>

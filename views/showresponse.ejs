@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <link rel="stylesheet" href="/stylesheets/edit.css">
+</head>
+<body>
+        <div id="fb-root"></div>
+  
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"></script>    
+          
+    <div id="sharediv">
+    <div class="fb-share-button" data-href="https://localhost:3000/form/<%= form.id %>/submit" 
+        data-layout="button" data-size="small"><a target="_blank"
+         href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse"
+          class="fb-xfbml-parse-ignore">Share</a></div>
+    
+          <a href="https://localhost:3000/form/<%= form.id %>/submit"
+           class="twitter-share-button" data-show-count="false">Tweet</a>
+           <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        
+                <div id="header" >
+                    <div class="homebtn">
+                        <form action="/user" >
+                            <button>User Home Page</button>
+                        </div>
+                        
+                            </form>   
+            <div class="container" id="alinks" style="background-color: white">
+                   
+                            <a href="/form/edit/<%= form.id %>" class="a1" id="qa">questions</a>
+                            <a href="/form/<%= form.id %>/view/response" class="a1" id="qb">responses</a>
+                        </div>
+                    </div>
+     <section id="sec1" class="qlist container" >  
+         <form action="/form/<%= form.id %>/get/chart">
+        <button>Analytics</button>
+        </form>
+
+    <h1 style="margin: 0%">Response list</h1>
+         <% if(answers.length==0){%>
+              <h2>No Responses yet! Try sharing it!</h2>
+         <% } %>
+    <% answers.forEach(function(a){ %>
+       <p>A response was recorded at <%= a.time.slice(0,24) %></p>
+       
+        <form action="/<%= form.id %>/view/response/<%= a.id %>">
+        <button>View response</button>
+        </form>
+
+    <% }) %>
+</section>  
+
+<script>
+    var qb=document.querySelector("#qb");
+qb.style.color="rgb(224,69,0)";
+qb.style.borderBottomWidth="2px";
+qb.style.borderBottom="solid rgb(224,69,0)";
+
+
+</script>
+</body>
+</html>

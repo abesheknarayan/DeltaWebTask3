@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+<link rel="stylesheet" href="/stylesheets/edit.css">
+
+</head>
+<body>
+   
+        <div id="darkdiv1">
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"></script>        
+<div id="sharediv">
+<div class="fb-share-button" data-href="https://localhost:3000/form/<%= form.id %>/submit" 
+    data-layout="button" data-size="small"><a target="_blank"
+     href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse"
+      class="fb-xfbml-parse-ignore">Share</a></div>
+
+      <a href="https://localhost:3000/form/<%= form.id %>/submit"
+       class="twitter-share-button" data-show-count="false">Tweet</a>
+       <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+     
+       
+        <div>
+                <form action="/form/<%= form.id %>/question/delete/" id="delq" method="POST"></form>
+                <form action="/form/<%= form.id %>/radio/addopt/" id="addopt" method="POST"></form>
+                <form action="/form/<%= form.id %>/check/addopt/" id="addcheck" method="POST"></form>
+                <form action="/form/<%= form.id %>/question/option/delete/" id="delopt" method="POST"></form>
+                <form action="/form/<%= form.id %>/question/type/" id="changetype" method="POST"></form>
+                <form action="/form/<%= form.id %>/delete/img/" id="delimg" method="POST"></form>
+                <form action="/form/<%= form.id %>/upload/file" method="POST" enctype="multipart/form-data" id="addfile" ></form>
+                <form action="/form/<%= form.id %>/delete/file/" method="POST" id="delfile"></form>
+                  </div>
+                  
+        </div>
+        <div id="header" >
+                <div class="homebtn">
+                    <form action="/user" >
+                        <button>User Home Page</button>
+                    </form> 
+                    </div>
+      
+        <div class="container" id="alinks" style="background-color: white">
+               
+                        <a href="/form/edit/<%= form.id %>" class="a1" id="qa">questions</a>
+                        <a href="/form/<%= form.id %>/view/response" class="a1" id="qb">responses</a>
+                    </div>
+                </div>
+        <section id="sec1">
+<div class="container">
+        
+        <form action="/form/<%= form.id %>/save" method="POST" id="form1" >   
+    <div class="qlist" id="div1">
+       
+            <label for="title">Title</label><br>
+            <input type="text" name="title" value="<%= form.title %>" class="inputs"><br>
+            <label for="description">Description</label><br>
+            <input type="text" name="description" placeholder="description" value="<%= form.description %>" class="inputs"><br>
+            <label for="inputs">Duration in Days</label><br>
+             <input type="number" name="duration" placeholder="form duration in days.." class="inputs" value="<%= form.days %>"><br>
+            
+             <label for="subperuser">Submission Per User</label><br>
+             <input type="number" name="subperuser" class="inputs" placeholder="submission per user.."  id="subperuser" value="<%= form.subperuser %>">
+           
+           <div id="addnewfile">
+            <input type="file" name="myfile" form="addfile" class="fileinputs inputs" accept="application/pdf" required>
+             <button form="addfile" >Add File </button><br><br>
+            </div>
+        </div>
+          <% if(form.file.length>0){ %>
+            <%  form.file.forEach(function(file){ %>
+                   <object data="<%= file.url %>" type="application/pdf" width="700" height="500"></object>
+                   <button name="<%= file.fname %>" form="delfile" class="delfilebtns">Delete file</button>
+            <%  }) %>
+          <% } %>
+              
+           
+           
+
+        <% form.questions.forEach(function(q,index){ %>
+            <div class="qlist">
+                <input type="text" name="q<%= q.pos %>" value="<%= q.question %>" class="inputs" form="form1" >
+          <div class="dropdown">
+              <div class="dropbtn">Question Type 🔻 </div>
+              
+              <div class="dropdown-content">
+                   <button name="<%= q.id %>" value="text" form="changetype" class="changetypebtns">Text Answer</button>
+                   <button name="<%= q.id %>" value="num" form="changetype" class="changetypebtns" >Number Answer</button>
+                   <button name="<%= q.id %>" value="radio" form="changetype" class="changetypebtns" >Multiple Choice</button>
+                   <button name="<%= q.id %>" value="check" form="changetype" class="changetypebtns" >Checklist</button>
+                   <button name="<%= q.id %>" value="image" form="changetype" class="changetypebtns">Image </button>
+                   <button name="<%= q.id %>" value="file" form="changetype" class="changetypebtns" >File</button>
+             </div>
+            
+
+          </div>
+          <br>
+          <br>
+          <input type="file" name="myfile" form="addimgform" accept="images/*" >
+          <button class="addimagebtns" name="<%= q.id %>" form="addimgform" >Add Image </button><br><br>
+          <% if(q.img.length>0){ %>
+            <% q.img.forEach(function(i,index){ %>
+               
+                <img src="<%= i.url %>" alt="img<%= index %>"><br>
+                      <button form="delimg" name="<%= i.name %>/<%= q.id %>" class="delimgbtns" >Delete image</button>
+           <%  }) %>
+          <% } %>
+
+          
+          <% if(q.type=="num"){  %>
+                <p>....Number Answer...</p>
+                <% }  %>
+            <% if(q.type=="text"){  %>
+                <p>...Descriptive Answer...</p>
+                <% } %>
+                <% if(q.type=="radio"){  %>
+                    <p>...Mutliple choice question...</p>
+                      
+                      <% q.options.forEach(function(opt,index2){ %>
+                          
+                          <form >
+                                <input type="radio" value="<%= opt %>" name="opt" class="options"  >
+                                <label for="options"><%= opt %></label><br>
+                          </form>
+                          <button name="<%= q.id %>/<%= index2 %>" form="delopt" class="deloptbtns deleteall">Delete option</button>
+                          <h2></h2>
+                          
+                         
+                        
+                     
+                      <% }) %>
+                
+                    
+                     <input type="text" name="radio<%= q.pos %>" placeholder="option here .." form="addopt" >
+                         <button name="<%= q.id %>" class="optionbtns" form="addopt" >Add Option</button>
+                    
+                    <% } %>
+                    <% if(q.type=="check"){ %>
+                       <p>.... Checklist ...</p>
+                        <% q.options.forEach(function(opt,index3){ %>
+                          
+                            <form >
+                                  <input type="checkbox" value="<%= opt %>" name="opt" class="options"  >
+                                  <label for="options"><%= opt %></label><br>
+
+                            </form>
+                            <button name="<%= q.id %>/<%= index3 %>" form="delopt" class="deloptbtns deleteall">Delete option</button>
+                            
+                           
+                           
+                        <% }) %>
+
+                        <input type="text" name="check<%= q.pos %>" placeholder="option here .." form="addcheck" required>
+                        <button name="<%= q.id %>" class="checkboxbtns" form="addcheck" >Add</button>
+                    <% } %>
+
+                   <% if(q.type=="image"){ %>
+                           <p>....Uploading image type....</p>
+                  <%  } %>
+                  <%   if(q.type=="file"){ %>
+                      <p>...Uplaoding file type...</p>
+                   <%  } %>
+
+
+                    <br>
+              <button  name="<%= q.id %>" value="Delete" class="delbtns deleteall" form="delq">Delete Question </button>
+           </div>
+        
+
+        <% }) %>
+        <button type="submit" id="submitbtn" form="form1" class="sidebtns">Save Changes</button>
+    </form>
+</div> 
+</section>
+    
+<div id="sidebar">
+        
+      
+       <button id="addtextbtn" class="sidebtns" id="addtextbtn" >Add  Question</button>
+  
+       
+       <div id="addtextfield">
+       <form action="/form/edit/<%= form.id %>/add/text" method="POST">
+        <input type="text" name="text" placeholder="question here.." required>
+        <button  class="addfields">Add</button>
+    </form> 
+       
+    </div>
+   
+
+        <form action="/user" >
+            <button class="sidebtns" id="saveform" >Submit Form</button>
+            </form>
+    
+        <div id="addimagefield">
+
+                <form action="/form/<%= form.id %>/upload/" method="POST" enctype="multipart/form-data" id="addimgform"> 
+                   
+                   
+                   
+                    </form>
+                </div>
+        </div>
+       
+
+       
+
+      
+
+
+<script>
+var addtextbtn=document.querySelector("#addtextbtn");
+var addtextfield=document.querySelector("#addtextfield");
+var addnumbtn=document.querySelector("#addnumbtn");
+var radiofield=document.querySelector("#radiofield");
+var submitbtn=document.querySelector("#submitbtn");
+var addnumfield=document.querySelector("#addnumfield");
+var addfields=document.querySelectorAll(".addfields");
+var delbtns=document.querySelectorAll(".delbtns");
+var delform=document.querySelector("#delq");
+var addoptbtns=document.querySelectorAll(".optionbtns");
+var addopt=document.querySelector("#addopt");
+var checkfield=document.querySelector("#checkfield");
+var checkbtn=document.querySelector("#checkbtn")
+var checkboxbtns=document.querySelectorAll(".checkboxbtns");
+var checkform=document.querySelector("#addcheck");
+var deloptbtns=document.querySelectorAll(".deloptbtns");
+var delopt=document.querySelector("#delopt");
+var addimagefield=document.querySelector("#addimagefield");
+var addimagebtns=document.querySelectorAll(".addimagebtns");
+var changetype=document.querySelector("#changetype");
+var changetypebtns=document.querySelectorAll(".changetypebtns");
+var sec1=document.querySelector("#sec1");
+var addimgform=document.querySelector("#addimgform");
+var delimgbtns=document.querySelectorAll(".delimgbtns");
+var delfilebtns=document.querySelectorAll(".delfilebtns");
+var delfile=document.querySelector("#delfile");
+var addnewfile=document.querySelector("#addnewfile");
+var qlist=document.querySelectorAll(".qlist");
+var qa=document.querySelector("#qa");
+addtextfield.style.display="none";
+
+qa.style.color="rgb(224,69,0)";
+qa.style.borderBottomWidth="2px";
+qa.style.borderBottom="solid rgb(224,69,0)";
+
+
+addimagefield.style.display="none";
+
+qlist.forEach(function(q,index)
+{
+    q.addEventListener("click",function()
+    {
+        q.style.boxShadow= "0 0 5px 1px rgba(0,0,0,.12), 0px 1px 8px 2px rgba(0,0,0,.24)";
+      qlist.forEach(function(q1,i){
+          if(i!=index)
+          {
+              q1.style.boxShadow="none";
+          }
+      })  
+
+    })
+
+
+})
+
+addtextbtn.addEventListener("click",function()
+{
+    addtextfield.style.display="";
+});
+
+addimagebtns.forEach(function(addimagebtn){
+addimagebtn.addEventListener("click",function()
+{   
+    var u=addimgform.action;
+    u=u+addimagebtn.name;
+    addimgform.action=u;
+    addimagefield.style.display="";
+   
+})})
+delbtns.forEach(function(delbtn)
+{
+    delbtn.addEventListener("click",function()
+    {
+        // alert(delbtn.name);//
+    var url=delform.action;
+    url=url+delbtn.name;    
+    
+    delform.action=url;
+
+    })
+})
+addoptbtns.forEach(function(btn){
+
+    btn.addEventListener("click",function()
+{
+    var url2=addopt.action;
+    url2=url2+btn.name;
+   addopt.action=url2;
+})
+})
+checkboxbtns.forEach(function(cbtn)
+{
+ cbtn.addEventListener("click",function()
+ {
+     var url3=addcheck.action;
+     url3=url3+cbtn.name;
+     
+     addcheck.action=url3;
+ })   
+})
+deloptbtns.forEach(function(deloptbtn)
+{
+    deloptbtn.addEventListener("click",function()
+    {
+        var url4=delopt.action;
+        url4=url4+deloptbtn.name;
+        // alert(deloptbtn.name);
+        delopt.action=url4;
+})
+})
+changetypebtns.forEach(function(chbtn)
+{
+    chbtn.addEventListener("click",function()
+    {
+        var url5=changetype.action;
+        url5=url5+chbtn.name+'/'+chbtn.value;
+        changetype.action=url5;
+    })
+})
+document.addEventListener("keypress",function(e)
+{
+    if(e.keyCode==13)
+    {
+        submitbtn.click();
+    }
+})
+delimgbtns.forEach(function(delimgbtn)
+{
+    delimgbtn.addEventListener("click",function()
+    {
+        var url6=delimg.action;
+        url6=url6+delimgbtn.name;
+        delimg.action=url6;
+    })
+})
+delfilebtns.forEach(function(delfilebtn){
+    delfilebtn.addEventListener("click",function()
+    {
+        var url7=delfile.action;
+        url7=url7+delfilebtn.name;
+        delfile.action=url7;
+        })
+})
+
+</script>           
+</body>
+
+</html>

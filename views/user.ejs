@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet"  href="/stylesheets/user.css">
+    <link href="https://fonts.googleapis.com/css?family=Bahianita&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+       <a href="/user">Home</a> 
+       <span style="margin-left: 75%"> Logged in as <%= user.username %></span>
+    <a href="/logout" id="logout"> Logout</a>
+</nav>
+    
+    
+  
+
+
+<div id="customdiv">
+    <div id="flex1">
+<form action="/create/form">
+   
+    <button id="btn" class="btns"></button>
+
+    </form>
+    <p>Create New form</p>
+</div>
+
+<div id="c1">
+
+        <form action="/create/custom/1">
+      <button  id="cinfo" class="btns"> </button>
+      </form>
+      <p>Contact Information</p>
+    </div>
+    <div id="c2">
+      <form action="/create/custom/2">
+        <button id="treg" class="btns"> </button>
+        </form>
+        <p>T-Shirt Registration</p>
+    </div>
+        <div id="c3">
+        <form action="/create/custom/3">
+            <button id="festreg" class="btns"></button>
+            </form>
+            <p>Event Registration</p>
+        </div>
+      
+
+  </div>
+</div>
+
+
+<form action="/user/explore" method="GET">
+    <button id="allformsbtn">Explore</button>
+</form>
+   
+
+<h2 style="font-family: 'Bahianita', cursive; text-align: center;letter-spacing: 3px;font-size: 32px;">User forms</h2><br>
+   <div id="userforms">
+
+       
+       <% user.allforms.forEach(function(form){ %>
+        <div class="formblock">
+    
+        <p>Form Title</p>  <%= form.title %> <br>
+        
+        <form action="/form/edit/<%= form.id %>" method="GET">
+        <button class="editform">edit form</button>
+        </form>
+        <form action="/form/delete/<%= form.id %>" method="POST">
+        <button class="deleteform">Delete form</button>
+        </form>
+       
+        <form action="/form/<%= form.id %>/view/response" >
+        <button class="viewresponse" >View Responses</button>
+        </form>
+        </form>
+    </div>
+
+      <% }); %>
+    </div>
+   
+</p>
+    
+<script>
+var btn=document.querySelector("#btn");
+
+
+
+
+</script>
+</body>
+</html>

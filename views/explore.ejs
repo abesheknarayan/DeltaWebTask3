@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <link rel="stylesheet"  href="/stylesheets/user2.css">
+</head>
+<body>
+
+      
+        
+        <nav>
+            <a href="/user">Home</a> 
+            <span style="margin-left: 75%"> Logged in as <%= user.username %></span>
+         <a href="/logout" id="logout"> Logout</a>
+     </nav>
+         
+         
+    
+     
+        <div id="allforms">
+        <div class="buttondiv">
+                <form action="/user/sort/1" method="GET">
+                <button class="latest">Latest</button>
+        
+                </form>
+                <form action="/user/sort/2" method="GET">
+                <button class="trending">Trending Forms</button>
+                </form>
+              </div>
+            <div id="userforms">       
+             <% forms.forEach(function(form,index){ %>
+                         <div class="formblock">
+                         <% if((form.duration + form.time)-Date.now()> 0){ %>
+                    
+                            <p>Form Title</p>  <%= form.title %> <br>
+                            <h2>Total Submissions: <%=  form.subm %></h2>
+                        <%  if(user.subforms.length>0){ %>
+                               <% var t=0; %>
+                          <%   for(  var  i=0;i < user.subforms.length;i++){ %> 
+                             <% if(user.subforms[i].formid==form.id){ %>
+                                  
+                                 <% if(user.subforms[i].time < form.subperuser){ %>
+                                     
+                            <form action="/form/<%= form.id %>/submit/">
+                                <button>Fill response</button>
+                                </form>
+                               
+                                <p class="submsg">You can fill this form <%=  form.subperuser -user.subforms[i].time  %> more times </p>
+                                <p class="deadlinemsg">*Submission ends in <%= (((form.duration+form.time)-Date.now())/3600000 ).toFixed(2)%> hours </p>
+                                  <% } %>
+                                  <% if(user.subforms[i].time >= form.subperuser){ %>
+                                        <p class="srymsg">Sorry! You have reached the Submission limit for this form</p>
+                                  <% } %>
+        
+                                
+                                    <% t=1;break; %>
+                             <% } %>
+                           
+                           <%  }    %>    
+                           <% } %>
+                           <% if(t==0){ %>
+                            
+                             
+                 
+                                <form action="/form/<%= form.id %>/submit/">
+                                    <button>Fill response</button>
+                                    </form>
+                                   
+                                    <p class="submsg">You can fill this form <%=  form.subperuser  %> more times </p>
+                                    <p class="deadlinemsg">*Submission ends in <%= (((form.duration+form.time)-Date.now())/3600000 ).toFixed(2)%> hours </p>
+                            
+                         <%  } %>
+                         <%  if(user.subforms.length==0){ %>
+                            
+                            <form action="/form/<%= form.id %>/submit/">
+                                <button>Fill response</button>
+                                </form>
+                               
+                                <p class="submsg" >You can fill this form <%=  form.subperuser   %> more times </p>
+                                <p class="deadlinemsg">*Submission ends in <%= (((form.duration+form.time)-Date.now())/3600000 ).toFixed(2)%> hours </p>   
+                          <% } %>
+                           <% } %>
+                
+                          </div>
+                   
+              <% }); %>
+            </div> 
+            </div>
+        
+
+</body>
+</html>

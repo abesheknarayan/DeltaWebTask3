@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<p>analytics page</p>
+<% form.questions.forEach(function(q){ %>
+<% if(q.type=="radio"){ %>
+<p class="qpos"><%= q.pos %></p>
+<% q.options.forEach(function(o){ %>
+<p class="opts<%= q.pos %>"><%= o %></p>
+<% }) %>
+
+<% answers.forEach(function(a){ %>
+ <% a.answerlist.forEach(function(a1){ %>
+<% if(a1.pos==q.pos){ %>
+    <div id="answers<%= q.pos %>">
+<p><%= a1.answer %></p>
+
+</div>
+<% } %>
+
+<%  }) %>
+<% }) %>
+<% } %>
+<% }) %>
+
+<canvas></canvas>   
+<script>
+var qpos=document.querySelectorAll(".qpos");
+qpos.forEach(function(q){
+    var cl="opts"+q.textContent;
+    var options=document.querySelectorAll(cl);
+})
+
+</script>
+
+</body>
+
+
+
+</html>

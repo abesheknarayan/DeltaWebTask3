@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <link rel="stylesheet" href="/stylesheets/edit.css">
+    </head>
+    <body>
+       
+  
+<div id="header"  >
+      <div class="homebtn">
+          <form action="/user" >
+              <button>User Home Page</button>
+          </form> 
+          </div>
+          <div class="container" id="alinks" style="background-color: white">
+               
+               <a href="/form/edit/<%= form.id %>" class="a1" id="qa">questions</a>
+               <a href="/form/<%= form.id %>/view/response" class="a1" id="qb">responses</a>
+           </div>
+</div>
+
+
+          <div class="container qlist" >
+
+         
+       
+        <% form.questions.forEach(function(q){ %>
+
+         <div class="responses">
+        
+            <p>Question: <%= q.question %></p>
+            <% if(q.img.length>0){ %>
+                <% q.img.forEach(function(i,index){ %>
+                   
+                    <img src="<%= i.url %>" alt="img<%= index %>"><br>
+    
+               <%  }) %>
+              <% } %>
+           
+    
+           <% if(q.type=="check"){ %>
+            <% q.options.forEach(function(opt){ %>
+               <input type="checkbox" disabled><%= opt %>
+            <% }) %>
+            
+                 <p>
+                 Response:
+                 </p>
+                 
+              <%   answer.checkedlist.forEach(function(c){ %>
+                <% if(c.cpos==q.pos){ %>
+                      <p><%= c.check %> was chosen</p>
+                <% } %>
+                <% }) %>
+
+
+          <%  }    %>    
+          <% if(q.type!="check"){ %>
+            <%  if(q.type=="radio"){ %>
+
+              
+
+            <%  q.options.forEach(function(opt){ %>
+                <input type="radio" disabled><%= opt %> <br>
+                
+         <% }) %>
+             
+ 
+ 
+            <%  } %>
+            <%  } %>
+          
+            <%   answer.answerlist.forEach(function(a){  %>
+             <% if(a.pos==q.pos){ %>
+                 <p>Response: <%=a.answer %> </p>
+              
+
+ 
+            <%  } %>
+            <% })   %>    
+            <%  if(answer.img.length>0){ %>
+                <%   answer.img.forEach(function(image){ %>
+                   <% if(image.pos==q.pos){ %>
+                    <img src="<%= image.url %>" alt="image">
+                   <% } %>
+                   
+                  <% }) %>
+             <%  } %>
+             <%  if(answer.file.length>0){ %>
+                <%   answer.file.forEach(function(fil){ %>
+                   <% if(fil.pos==q.pos){ %>
+                    <object data="<%= fil.url %>" type="application/pdf" width="700" height="500"></object>
+                   <% } %>
+                   
+                  <% }) %>
+             <%  } %>
+
+ 
+           
+          
+         
+
+            </div>
+
+      <%  }) %>
+   </div>
+    </body>
+</html>
