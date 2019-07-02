@@ -17,7 +17,7 @@ var path=require("path");
 var multer=require("multer");
 var flash=require("connect-flash");
 var webpush=require("web-push");
-const webshot=require("webshot");
+
 var publicVapidkey="BMx0gy_PwfNmEg50ZFOTW0YMKzFrobijNjDEmZNbPfchD44YxGrbbHUtX8LZTSthADGQOvm51vB45-5gcm-gbvw";
 var privateVapidkey="cewKa9T90PeSsDtagjcsa3n2aTE3CynCcOwuOJKDuEc";
 webpush.setVapidDetails("mailto:test@test.com",publicVapidkey,privateVapidkey);
