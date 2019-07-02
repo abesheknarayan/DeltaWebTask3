@@ -590,6 +590,13 @@ app.post("/form/:fid/question/delete/:qid",function(req,res)
                            newform.questions.splice(i,1);
                        }
                     }
+                    for(var j=0;j<newform.analytics.length;j++)
+                    {
+                        if(newform.analytics[j].pos==dq.pos)
+                        {
+                            newform.analytics.splice(j,1);
+                        }
+                    }
                     var tq=newform.totalq;
                     
 
@@ -1152,8 +1159,8 @@ catch(err)
 {
     console.log(err);
 }
-console.log("amamamamamamamamamamamamamamamamamama");
-console.log(form1);
+// console.log("amamamamamamamamamamamamamamamamamama");
+// console.log(form1);
 
 try{
  var sub=form1.subm;
@@ -1187,8 +1194,8 @@ try{
            {
            for(var j=0;j<req.body[cindex].length;j++)
            {
-            console.log("//////ergegrfgrfegfg//////////////rgrg0");
-             console.log(req.body[cindex][j]);
+            // console.log("//////ergegrfgrfegfg//////////////rgrg0");
+            //  console.log(req.body[cindex][j]);
              var cpos=fq.pos;
              var obj={
                  check:req.body[cindex][j],
@@ -1266,6 +1273,47 @@ try{
               answer:req.body[aindex],
               pos:p
           }
+
+        if(  form1.analytics.length>0){
+            for(var h=0;h<form1.analytics.length;h++){
+                var t1=0;
+                if(form1.analytics[h].pos==fq.pos)
+               {
+                   if(form1.analytics[h].a==req.body[aindex])
+                   {var b=form1.analytics[h].f;
+                   b++;
+                   form1.analytics[h].f=b;
+                   t1=1;
+                   var form2=await form1.save();
+                   break;
+                   }
+                   
+                      
+                 
+
+               }
+
+            }
+            if(t1==0)
+            {
+                var myobj={
+                    pos:fq.pos,
+                    a:req.body[aindex],
+                    f:1
+                }
+                form1.analytics.push(myobj);
+                var form2=await form1.save();
+            }
+        }
+        else{
+            var myobj={
+                pos:fq.pos,
+                a:req.body[aindex],
+                f:1
+            }
+            form1.analytics.push(myobj);
+            var form2=await form1.save();  
+        }
           answers.answerlist.push(obj);
       }
      var saveda= await answers.save();
@@ -1304,13 +1352,19 @@ try{
         var saveduser2=await loguser.save();
     }
 
- res.redirect("/user");  
+
 }
 catch(err)
 {
     console.log(err);
 }
+try{
+    res.redirect("/user");  
+}
+catch(err)
+{
 
+}
 
 
 
