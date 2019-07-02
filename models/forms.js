@@ -45,6 +45,11 @@ var formSchema=new mongoose.Schema({
         url:String,
         fname:String,
         ftype:String
+    }],
+    analytics:[{
+        pos:Number,
+        a:String,
+        f:Number
     }]
 })
 module.exports=mongoose.model("form",formSchema);
