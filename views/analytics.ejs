@@ -4,33 +4,121 @@
 <body>
 <p>analytics page</p>
 <% form.questions.forEach(function(q){ %>
-<% if(q.type=="radio"){ %>
-<p class="qpos"><%= q.pos %></p>
-<% q.options.forEach(function(o){ %>
-<p class="opts<%= q.pos %>"><%= o %></p>
-<% }) %>
+<% if(q.type=="text"||q.type=="num"||q.type=="radio"){ %>
+    <p> Question <%= q.question %></p>
+         <div style="display: none">
 
-<% answers.forEach(function(a){ %>
- <% a.answerlist.forEach(function(a1){ %>
-<% if(a1.pos==q.pos){ %>
-    <div id="answers<%= q.pos %>">
-<p><%= a1.answer %></p>
-
+         <p class="qpos"><%= q.pos %></p>     
+  <%  form.analytics.forEach(function(an){ %>
+ <% if(an.pos==q.pos){ %>
+    
+         <p class="a<%= an.pos %>"><%=  an.a %></p>     <p class="f<%= an.a %>"><%= an.f %></p>
+ <% } %>
+ <%   }) %>
 </div>
 <% } %>
-
-<%  }) %>
-<% }) %>
-<% } %>
+<canvas class="c<%= q.pos %>"></canvas>  
 <% }) %>
 
-<canvas></canvas>   
+ 
 <script>
 var qpos=document.querySelectorAll(".qpos");
+var obj=[
+    
+];
 qpos.forEach(function(q){
-    var cl="opts"+q.textContent;
-    var options=document.querySelectorAll(cl);
+    var cl=".a"+(Number(q.textContent));
+    var q=Number(q.textContent);
+    var a=document.querySelectorAll(cl);
+    a.forEach(function(a1){
+        var fid=".f"+a1.textContent;
+        var b=document.querySelector(fid);
+        var fre=b.textContent;
+        var r=Math.floor(Math.random()*q*10)+100;
+      var g=Math.floor(Math.random()*q*100)+10;
+      var b=Math.floor(Math.random()*q)*5;
+      var color="rgb("+r+","+g+","+b+")" 
+        var obj1={
+            answer:a1.textContent,
+            frequency:fre,
+            pos:q,
+            color:color
+            
+        }
+        obj.push(obj1);
+    })       
 })
+
+
+
+qpos.forEach(function(q){
+    var cc=".c"+q.textContent;
+     var n1=Number(q.textContent);
+var canvas=document.querySelector(cc);
+canvas.width=600;
+canvas.height=400;
+var ctx=canvas.getContext("2d");
+ctx.beginPath();
+var total=0;
+var ar=[];
+
+obj.forEach(function(o){
+    
+    if(o.pos==q.textContent)
+    {
+        total+=Number(o.frequency);
+  
+        ar.push(o);
+    //    alert(o.answer + "  "+ o.frequency);
+        
+    }})
+    // alert(ar[1].color);
+    // alert(ar.answer);
+// alert(total);
+ 
+
+   
+var pie=new Drawpieslice(ar,total);
+pie.draw();
+
+  function Drawpieslice(ar,total){
+  this.draw=function(){
+      this.total=total;
+    //   alert(this.total);
+    var startangle=0;  
+      ctx.beginPath();
+   var endangle;
+      for(var i=0;i<ar.length;i++)
+      {
+
+    ctx.beginPath();
+    ctx.moveTo(100,100);
+    ctx.fillStyle=ar[i].color;
+    // alert(ar[i].frequency);
+    
+    endangle=startangle+Math.PI*2*(Number(ar[i].frequency)/this.total);
+    // alert(Number(ar[i].frequency)/this.total);
+    // ctx.fillStyle="rgb("+this.r+","+this.g +","+this.b+")"
+      ctx.arc(100,100,70,startangle,endangle);
+      ctx.lineTo(100,100);
+      ctx.fill();
+      startangle=endangle;
+     
+   //label
+  
+     ctx.fillStyle=ar[i].color;
+     ctx.fillRect(200,70+15*i,10,10);
+     ctx.fill();
+     ctx.font="10px Georgia"; 
+     ctx.fillStyle="black";
+     ctx.fillText(ar[i].answer,200+15,80+15*i);
+     
+       
+  }
+}
+}
+})
+
 
 </script>
 
