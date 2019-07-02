@@ -1,11 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+  <link rel="stylesheet" href="/stylesheets/edit.css">
+
+</head>
+
 <body>
-<p>analytics page</p>
+<h2>Analytics Page</h2>
+<div id="header" >
+  <div class="homebtn">
+      <form action="/user" >
+          <button>User Home Page</button>
+      </form> 
+      </div>
+
+<div class="container" id="alinks" style="background-color: white">
+ 
+          <a href="/form/edit/<%= form.id %>" class="a1" id="qa">questions</a>
+          <a href="/form/<%= form.id %>/view/response" class="a1" id="qb">responses</a>
+      </div>
+  </div>
+
+<div class="container qlist" id="sec1">
 <% form.questions.forEach(function(q){ %>
 <% if(q.type=="text"||q.type=="num"||q.type=="radio"){ %>
-    <p> Question <%= q.question %></p>
+    <p> Question </p> <p><%= q.question %></p>
          <div style="display: none">
 
          <p class="qpos"><%= q.pos %></p>     
@@ -19,7 +38,7 @@
 <% } %>
 <canvas class="c<%= q.pos %>"></canvas>  
 <% }) %>
-
+</div>
  
 <script>
 var qpos=document.querySelectorAll(".qpos");
