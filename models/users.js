@@ -18,7 +18,11 @@ var userSchema=new mongoose.Schema({
         time:{
             type:Number,
          default:0}
-    }]  
+    }]  ,
+    notifications:[{
+        msg:String,
+        time:String
+    }]
 });
 userSchema.plugin(passportlocalmongoose);
 module.exports=mongoose.model("user",userSchema);

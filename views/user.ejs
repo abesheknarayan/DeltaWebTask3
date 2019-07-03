@@ -3,13 +3,23 @@
 <head>
 
     <link rel="stylesheet"  href="/stylesheets/user.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Bahianita&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav>
+    <section id="sec1">
+    <nav class="topnav" id="Mytopnav">
+
        <a href="/user">Home</a> 
-       <span style="margin-left: 75%"> Logged in as <%= user.username %></span>
+      <% if(user.notifications.length>0){ %>
+       <button id="notbtn" style="color: #ff1a1a ;background: inherit ;margin-left: 1%;border: none;font-weight: 600 " >Notifications</button>
+      <% } %>
+       <!-- <span style="margin-right: 2%;margin-left:70%; "> Logged in as <%= user.username %></span> -->
+       
     <a href="/logout" id="logout"> Logout</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+          </a>
 </nav>
     
     
@@ -52,7 +62,7 @@
 
 
 <form action="/user/explore" method="GET">
-    <button id="allformsbtn">Explore</button>
+    <button id="allformsbtn">Explore</button><br>
 </form>
    
 
@@ -80,15 +90,48 @@
 
       <% }); %>
     </div>
-   
-</p>
+</section>
+<% if(user.notifications.length>0){ %>   
+    <section id="notificationpanel">
+      <h2 style="text-transform: uppercase;text-align: center;">Notifications</h2>
+    <% user.notifications.forEach(function(notif){ %>
+    <div class="notifybar" >
+    <p><%= notif.msg %> </p>
+    <p><%= Math.floor( (Date.now()- notif.time)/60000 ) %> mins ago</p>
+    
+    </div>
+    <% }) %>
+    
+    <form action="/user/<%= user.id %>/clear/notification" method="POST">
+    <button id="clearnot" >Clear </button>
+    </form>
+    <% } %>
+    </section>
+
+</section>
+
+
     
 <script>
 var btn=document.querySelector("#btn");
+var notbtn=document.querySelector("#notbtn");
+var notificationpanel=document.querySelector("#notificationpanel");
+var notifybar=document.querySelectorAll(".notfiybar");
+var sec1=document.querySelector("#sec1");
+notificationpanel.style.display="none";
+notbtn.addEventListener("click",function(){
 
-
-
-
+    notificationpanel.style.display="";
+    sec1.style.opacity="0.2";
+})
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
 </script>
 </body>
 </html>

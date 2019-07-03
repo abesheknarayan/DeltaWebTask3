@@ -22,6 +22,8 @@ var publicVapidkey="BMx0gy_PwfNmEg50ZFOTW0YMKzFrobijNjDEmZNbPfchD44YxGrbbHUtX8LZ
 var privateVapidkey="cewKa9T90PeSsDtagjcsa3n2aTE3CynCcOwuOJKDuEc";
 webpush.setVapidDetails("mailto:test@test.com",publicVapidkey,privateVapidkey);
 
+
+
 const storage=multer.diskStorage({
   destination:"./public/uploads/",
   filename: function(req,file,cb){
@@ -370,7 +372,8 @@ app.get("/create/form",isloggedin,function(req,res)
     form.create({
         title:"Untitled form",
       totalq:0,
-      time:Date.now()
+      time:Date.now(),
+      createdUser:req.user.id
     },function(err,form)
     {
         if(err)
@@ -1248,7 +1251,8 @@ try{
       
             var file1="/uploads/"+req.files[0].filename;  
             var  file2="/uploads/"+req.files[0].filename;
-            var qpos=fq.pos;
+            var qpos=fq.pos; console.log("/////////////////////////////////////////////////////")
+
             var name=  file2.split(".");
             var name2=name[0].split("/");
             var obj={
@@ -1359,11 +1363,32 @@ catch(err)
     console.log(err);
 }
 try{
-    res.redirect("/user");  
+ var formadmin=  await user.findById(form1.createdUser);
+//  console.log(form1.createdUser);
+//  console.log("/////////////////////////////////////////////////////")
+//  console.log("/////////////////////////////////////////////////////")
+
+
+console.log(formadmin.username);
+var d=JSON.stringify(new Date());
+console.log(d +  typeof d);
+d=d.slice(0,24);
+var s="Your form tittled "+form1.title+ " got a response at " +d;
+var obj1={
+    msg:s,
+    time:Date.now()
+
+}
+formadmin.notifications.push(obj1);
+var saveadmin=await formadmin.save();
+
+res.redirect("/user");  
+
+   
 }
 catch(err)
 {
-
+console.log(err);
 }
 
 
@@ -1374,7 +1399,29 @@ catch(err)
 }
 
 
-
+app.post("/user/:uid/clear/notification",function(req,res)
+{
+    user.findById(req.user.id,function(err,user)
+    {
+        if(err)
+        {
+            console.log(err);
+        }
+        else{
+          user.notifications=[];
+            user.save(function(err,su)
+            {
+                if(err)
+                {
+                    console.log(err);
+                }
+                else{
+                res.redirect("/user");
+                }
+            })
+        }
+    })
+})
 
 
 app.post("/form/:fid/submit/response",upload.any(),function(req,res){

@@ -16,8 +16,8 @@
 
 <div class="container" id="alinks" style="background-color: white">
  
-          <a href="/form/edit/<%= form.id %>" class="a1links" id="qa">questions</a>
-          <a href="/form/<%= form.id %>/view/response" class="a1links" id="qb">responses</a>
+          <a href="/form/edit/<%= form.id %>" class="a1link" id="qa">questions</a>
+          <a href="/form/<%= form.id %>/view/response" class="a1link" id="qb">responses</a>
       </div>
   </div>
 
@@ -51,6 +51,8 @@ qpos.forEach(function(q){
     var a=document.querySelectorAll(cl);
     a.forEach(function(a1){
         var fid=".f"+a1.textContent;
+        // alert(a1.textContent);
+        // alert(fid);
         var b=document.querySelector(fid);
         var fre=b.textContent;
         var r=Math.floor(Math.random()*q*10)+100;
